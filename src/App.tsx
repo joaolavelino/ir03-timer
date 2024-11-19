@@ -3,6 +3,7 @@ import { defaultTheme } from "./styles/themes/default";
 import { useState } from "react";
 import { lightTheme } from "./styles/themes/light";
 import { Moon, Sun } from "phosphor-react";
+import { GlobalStyle } from "./styles/global";
 
 export function App() {
   const [theme, setTheme] = useState<"default" | "light">("default");
@@ -19,6 +20,8 @@ export function App() {
         {theme == "default" ? <Moon /> : <Sun />}
       </button>
       <p>Hello</p>
+
+      <GlobalStyle />
     </ThemeProvider>
   );
 }
