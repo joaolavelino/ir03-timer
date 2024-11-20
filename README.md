@@ -1,4 +1,53 @@
-## Styled Components Init
+## Absolute Imports on Vite
+
+To use Absolute Imports on a Vite React project, you need to make some changes to the vite.config.js file, which is found at the root of your project directory.
+
+Add the code below to the **vite.config.js** file
+
+```js
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      src: "/src",
+    },
+  },
+});
+```
+
+Then Create a **jsconfig.json** file on the root directory of the progress and add the following to set the VSCode intelliSense to recognize the absolute paths:
+(On the vite project, you can add to the existing **tsconfig.json** file)
+
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "src/*": ["./src/*"]
+    }
+  }
+}
+```
+
+- Complete article: https://dev.to/andrewezeani/how-to-create-absolute-imports-in-vite-react-app-a-step-by-step-guide-28co#setting-up-the-vite-react-project-for-absolute-imports
+
+## React Router Initial Setup
+
+### Install React Router Dom
+
+Documentation:
+https://reactrouter.com/en/6.28.0/start/tutorial
+
+Install the main Styled Components package
+
+```
+  npm i react-router-dom
+```
+
+## Styled Components Initial Setup
 
 ### Install Styled Components
 
