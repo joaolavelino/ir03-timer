@@ -1,9 +1,10 @@
-import { ThemeProvider } from "styled-components";
-import { defaultTheme } from "./styles/themes/default";
 import { useState } from "react";
-import { lightTheme } from "./styles/themes/light";
-import { Moon, Sun } from "phosphor-react";
+import { BrowserRouter } from "react-router-dom";
+import { ThemeProvider } from "styled-components";
+import { Router } from "./Router";
 import { GlobalStyle } from "./styles/global";
+import { defaultTheme } from "./styles/themes/default";
+import { lightTheme } from "./styles/themes/light";
 
 export function App() {
   const [theme, setTheme] = useState<"default" | "light">("default");
@@ -16,10 +17,9 @@ export function App() {
 
   return (
     <ThemeProvider theme={currentTheme}>
-      <button onClick={toggleTheme}>
-        {theme == "default" ? <Moon /> : <Sun />}
-      </button>
-      <p>Hello</p>
+      <BrowserRouter>
+        <Router theme={theme} toggleTheme={toggleTheme} />
+      </BrowserRouter>
 
       <GlobalStyle />
     </ThemeProvider>

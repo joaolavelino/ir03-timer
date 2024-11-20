@@ -1,3 +1,9 @@
+# Ignite Timer
+
+Project created during the React formation @Rocketseat.
+
+This document contains some of the initial setup process that are needed on other projects and some tips that I gather during the learning process.
+
 ## Absolute Imports on Vite
 
 To use Absolute Imports on a Vite React project, you need to make some changes to the vite.config.js file, which is found at the root of your project directory.
@@ -46,6 +52,22 @@ Install the main Styled Components package
 ```
   npm i react-router-dom
 ```
+
+### Create a **Router.tsx** file on the /src folder
+
+This is a component that will manage the routes of the application
+
+### Wrap the application in a BrowserRouter
+
+On the **App.ts** file, wrap the entire aplication with the BrowserRouter component, imported from React Router Dom.
+
+This component can be outside or inside the ThemeProvider component. I'm putting it inside the ThemeProvider, without including the GlobalStyle component.
+
+### Manage Routes and Layouts
+
+Inside the Router Component is possible to manage different routes (public and private) and their respective layouts by stacking different <Route/> components.
+
+It's important not to forget the <Outlet/> component inside the layout components, as it will act like the **children** of react components. It will load the element that is inside a nested route.
 
 ## Styled Components Initial Setup
 
