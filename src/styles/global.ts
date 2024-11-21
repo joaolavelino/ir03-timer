@@ -14,7 +14,8 @@ export const GlobalStyle = createGlobalStyle`
 
     body{
         background:${(props) => props.theme["gray-900"]};
-        color:${(props) => props.theme["gray-300"]}
+        color:${(props) => props.theme["gray-300"]};
+        -webkit-font-smoothing:antialiased;
     }
 
     body,textarea,input,button{
@@ -25,6 +26,11 @@ export const GlobalStyle = createGlobalStyle`
 
     button{
         cursor: pointer;
+
+        &:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
     }
 
     
