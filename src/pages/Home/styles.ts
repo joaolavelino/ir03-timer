@@ -64,7 +64,7 @@ export const StartCountdownButton = styled.button`
 
   font-weight: bold;
   background-color: ${(props) => props.theme["green-500"]};
-  color: ${(props) => props.theme["white-full"]};
+  color: ${(props) => props.theme.white};
   transition: 0.1s;
 
   &:enabled:hover {
