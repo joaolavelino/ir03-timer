@@ -10,11 +10,11 @@ Lib documentation: https://react-hook-form.com/get-started
 
 ### 1 - Start the useForm hook
 
-Destruct the returning object of the hook **useForm** to get our methods and variables from the library. This hook creates a 'new form' that can interact with the DOM and provides the tools for this integration.
+Destruct the returning object of the hook `useForm` to get our methods and variables from the library. This hook creates a 'new form' that can interact with the DOM and provides the tools for this integration.
 
 ### 2 - Integrate the form inputs with the form
 
-Use the **register()** from RHF as a function brought by the rest operator on the props.
+Use the `register()` from RHF as a function brought by the rest operator on the props.
 
 ```tsx
 {...register('task')}
@@ -30,13 +30,13 @@ This function sets a new input inside the form created by RHF. It gets the name 
 
 ### 3 - Submit function
 
-Inside the tag **form**, on the **onSubmit** parameter, pass the **handleSubmit** function imported with the **useForm()** hook. As a argument of this function, pass the actual submit function you created.
+Inside the tag `form`, on the `onSubmit` parameter, pass the `handleSubmit` function imported with the `useForm()` hook. As a argument of this function, pass the actual submit function you created.
 
 ```tsx
 <form action="" onSubmit={handleSubmit(handleCreateNewCycle)}>
 ```
 
-On the submit function, you can pass the data recieved from the form to be handled by the function. The data will be an object and the keys will be the names given on the **register** function on the inputs.
+On the submit function, you can pass the data recieved from the form to be handled by the function. The data will be an object and the keys will be the names given on the `register` function on the inputs.
 
 ```tsx
 function handleCreateNewCycle(data) {
@@ -55,7 +55,7 @@ interface newCycleFormData {
 }
 ```
 
-It's possible to create this interface automatically from the validation scheme . To do so, create a new **Type** (in this case, use type instead of interface, because it's created from data from other sources) using **zod.infer** and send the schema as a generic (remember to use typeof), This allow more conformity of the form information. As a new key is added on the scheme, the form will automatically expect this information.
+It's possible to create this interface automatically from the validation scheme . To do so, create a new `Type` (in this case, use type instead of interface, because it's created from data from other sources) using `zod.infer` and send the schema as a generic (remember to use typeof), This allow more conformity of the form information. As a new key is added on the scheme, the form will automatically expect this information.
 
 ```ts
 const newCycleFormSchema = zod.object({
@@ -69,13 +69,13 @@ const newCycleFormSchema = zod.object({
 type newCycleFormData = zod.infer<typeof newCycleFormSchema>;
 ```
 
-Assign this format on the **useForm** hook _as a generic_ just after the hook name.:
+Assign this format on the `useForm` hook _as a generic_ just after the hook name.:
 
 ```tsx
 const { register, handleSubmit, watch } = useForm<newCycleFormData>();
 ```
 
-Assign this format to the **data** argument on the submit function:
+Assign this format to the `data` argument on the submit function:
 
 ```tsx
 function handleCreateNewCycle(data: newCycleFormData) {
@@ -83,9 +83,10 @@ function handleCreateNewCycle(data: newCycleFormData) {
 }
 ```
 
-### - Set the initial values for the form
+### 5 - Set the initial values for the form
 
-_This is particularly usefull on update forms_
+NOTE: This is particularly usefull on update forms
+
 It's possible to send different settings as an object on the useForm hook call argument. One of those is the default values. The value of this setting is an object with the initial values of each input. The hook call will be like this:
 
 ```tsx
@@ -94,7 +95,7 @@ const { register, handleSubmit, watch } = useForm<newCycleFormData>({
 });
 ```
 
-### - Reset a form:
+### 6 - Reset a form:
 
 It's possible to get a reset form function from the useForm hook call.
 
@@ -115,18 +116,18 @@ This function will restore the default values of the form (set as an argument on
 
 ### 1 - Install Zod and the Hook Form Resolver
 
-**npm i zod**
+`npm i zod`
 Zod documentation: https://zod.dev/
 
-**npm i @hookform/resolvers** - This will allow integration between RHF and validation libraries.
+`npm i @hookform/resolvers` - This will allow integration between RHF and validation libraries.
 
 ### 2 - Import items on the form component
 
-On the form component, import the zod resolver. **import {zodResolver} from "@hookform/resolvers/zod"**
+On the form component, import the zod resolver. `import {zodResolver} from "@hookform/resolvers/zod"`
 
 ### 3 - useForm hook setup
 
-Pass an object with the resolver as a argument of **useForm** hook. The value is the **zodResolver** function imported from @hookform/resolvers. The argument of this function is the validation schema.
+Pass an object with the resolver as a argument of `useForm` hook. The value is the `zodResolver` function imported from @hookform/resolvers. The argument of this function is the validation schema.
 
 ```tsx
 const { register, handleSubmit, watch } = useForm<newCycleFormData>({
@@ -137,10 +138,11 @@ const { register, handleSubmit, watch } = useForm<newCycleFormData>({
 
 ### 4 - Create a schema
 
-_This can be done on a separate validation file on the component folder_
-Import zod on the form - **import \* as zod from 'zod'**
+NOTE: This can be done on a separate validation file on the component folder
 
-Create a validation schema using what we imported from **zod**. This schema will validate the data sent by the submit function (on the data argument).
+Import zod on the form - `import \* as zod from 'zod'`
+
+Create a validation schema using what we imported from `zod`. This schema will validate the data sent by the submit function (on the data argument).
 
 ```tsx
 const newCycleFormSchema = zod.object({
@@ -154,7 +156,7 @@ const newCycleFormSchema = zod.object({
 
 ### 5 - Display the errors
 
-To do so, get **formState** from the **useForm** hook. This will display the validation errors from the form. The useForm hook call will be something like:
+To do so, get `formState` from the `useForm` hook. This will display the validation errors from the form. The useForm hook call will be something like:
 
 ```tsx
 const { register, handleSubmit, watch, formState } = useForm({
@@ -172,7 +174,7 @@ console.log(formState.errors[--keyName--]);
 
 To use Absolute Imports on a Vite React project, you need to make some changes to the vite.config.js file, which is found at the root of your project directory.
 
-Add the code below to the **vite.config.js** file
+Add the code below to the `vite.config.js` file
 
 ```js
 import { defineConfig } from "vite";
@@ -188,8 +190,8 @@ export default defineConfig({
 });
 ```
 
-Then Create a **jsconfig.json** file on the root directory of the progress and add the following to set the VSCode intelliSense to recognize the absolute paths:
-(On the vite project, you can add to the existing **tsconfig.json** file)
+Then Create a `jsconfig.json` file on the root directory of the progress and add the following to set the VSCode intelliSense to recognize the absolute paths:
+(On the vite project, you can add to the existing `tsconfig.json` file)
 
 ```json
 {
@@ -217,13 +219,13 @@ Install the main Styled Components package
   npm i react-router-dom
 ```
 
-### Create a **Router.tsx** file on the /src folder
+### Create a `Router.tsx` file on the /src folder
 
 This is a component that will manage the routes of the application
 
 ### Wrap the application in a BrowserRouter
 
-On the **App.ts** file, wrap the entire aplication with the BrowserRouter component, imported from React Router Dom.
+On the `App.ts` file, wrap the entire aplication with the BrowserRouter component, imported from React Router Dom.
 
 This component can be outside or inside the ThemeProvider component. I'm putting it inside the ThemeProvider, without including the GlobalStyle component.
 
@@ -231,7 +233,7 @@ This component can be outside or inside the ThemeProvider component. I'm putting
 
 Inside the Router Component is possible to manage different routes (public and private) and their respective layouts by stacking different <Route/> components.
 
-It's important not to forget the <Outlet/> component inside the layout components, as it will act like the **children** of react components. It will load the element that is inside a nested route.
+It's important not to forget the <Outlet/> component inside the layout components, as it will act like the `children` of react components. It will load the element that is inside a nested route.
 
 ## Styled Components Initial Setup
 
