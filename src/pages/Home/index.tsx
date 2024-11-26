@@ -33,6 +33,7 @@ interface Cycle {
   taskMinutesAmount: number;
   startDate: Date;
   interruptedDate?: Date;
+  completedDate?: Date;
 }
 
 export function Home() {
@@ -46,22 +47,50 @@ export function Home() {
   });
 
   const activeCycle = cycles.find((el) => el.id == activeCycleId);
+
+  //CLOCK-FACE HANDLING
+
+  const totalSeconds = activeCycle ? activeCycle.taskMinutesAmount * 60 : 0;
+  const currentSeconds = activeCycle ? totalSeconds - secondsPassed : 0;
+  const minutesAmount = Math.floor(currentSeconds / 60);
+  const secondsAmount = currentSeconds % 60;
+
+  const minutesString = String(minutesAmount).padStart(2, "0");
+  const secondsString = String(secondsAmount).padStart(2, "0");
   console.log(cycles);
+
+  //TIMER MANAGEMENT
 
   useEffect(() => {
     let interval: number;
     if (activeCycle) {
       interval = setInterval(() => {
-        setSecondsPassed(
-          differenceInSeconds(new Date(), activeCycle.startDate)
+        const timeDifference = differenceInSeconds(
+          new Date(),
+          activeCycle.startDate
         );
+        if (timeDifference >= totalSeconds) {
+          setCycles((state) =>
+            state.map((cycle) => {
+              if (cycle.id === activeCycleId) {
+                return { ...cycle, completedDate: new Date() };
+              } else {
+                return cycle;
+              }
+            })
+          );
+          setSecondsPassed(0);
+          setActiveCycleId(null);
+        } else {
+          setSecondsPassed(timeDifference);
+        }
       }, 1000);
     }
     //essa função acontece antes do useEffect
     return () => {
       clearInterval(interval);
     };
-  }, [activeCycle]);
+  }, [activeCycle, totalSeconds, activeCycleId]);
 
   function handleCreateNewCycle(data: newCycleFormData) {
     const newCycle: Cycle = { ...data, id: uuidv4(), startDate: new Date() };
@@ -78,8 +107,8 @@ export function Home() {
 
   function handleInterruptCycle() {
     setActiveCycleId(null);
-    setCycles(
-      cycles.map((cycle) => {
+    setCycles((state) =>
+      state.map((cycle) => {
         if (cycle.id === activeCycleId) {
           return { ...cycle, interruptedDate: new Date() };
         } else {
@@ -90,15 +119,7 @@ export function Home() {
     setSecondsPassed(0);
   }
 
-  //CLOCK-FACE HANDLING
-
-  const totalSeconds = activeCycle ? activeCycle.taskMinutesAmount * 60 : 0;
-  const currentSeconds = activeCycle ? totalSeconds - secondsPassed : 0;
-  const minutesAmount = Math.floor(currentSeconds / 60);
-  const secondsAmount = currentSeconds % 60;
-
-  const minutesString = String(minutesAmount).padStart(2, "0");
-  const secondsString = String(secondsAmount).padStart(2, "0");
+  //BROWSER TAB CUSTOMIZATION
 
   useEffect(() => {
     document.title = activeCycle
