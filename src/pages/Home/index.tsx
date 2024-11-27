@@ -21,7 +21,7 @@ const newCycleFormSchema = zod.object({
   task: zod.string().min(1, "Informe o nome da tarefa"),
   taskMinutesAmount: zod
     .number()
-    .min(5, "O ciclo deve ter no mínumo 5 minutos")
+    .min(1, "O ciclo deve ter no mínumo 1 minutos")
     .max(60, "O ciclo deve ter no máximo 60 minutos"),
 });
 
@@ -57,7 +57,6 @@ export function Home() {
 
   const minutesString = String(minutesAmount).padStart(2, "0");
   const secondsString = String(secondsAmount).padStart(2, "0");
-  console.log(cycles);
 
   //TIMER MANAGEMENT
 
@@ -69,6 +68,7 @@ export function Home() {
           new Date(),
           activeCycle.startDate
         );
+        //if the time is over
         if (timeDifference >= totalSeconds) {
           setCycles((state) =>
             state.map((cycle) => {
@@ -79,9 +79,12 @@ export function Home() {
               }
             })
           );
+          //reset the clock
           setSecondsPassed(0);
+          //no active cycles
           setActiveCycleId(null);
         } else {
+          //if it's not over
           setSecondsPassed(timeDifference);
         }
       }, 1000);
@@ -151,7 +154,7 @@ export function Home() {
             type="number"
             placeholder="00"
             id="taskMinutesAmount"
-            min={5}
+            min={1}
             max={60}
             step={5}
             disabled={!!activeCycle}
