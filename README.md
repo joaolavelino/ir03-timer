@@ -4,6 +4,68 @@ Project created during the React formation @Rocketseat.
 
 This document contains some of the initial setup process that are needed on other projects and some tips that I gather during the learning process.
 
+## React's Context API
+
+### 1 - CreateContext() and UseContext()
+
+Create context will store an object with information that will be available to many components inside a context variable.
+
+```tsx
+export const CyclesContext = createContext({
+  activeCycleId: "abc",
+});
+```
+
+_Note that the context is Capitalized because it will be soon a component_
+
+Use context is used to import a context inside a component
+
+```tsx
+const { activeCycleId } = useContext(CyclesContext);
+```
+
+This information is immutable into the context and cannot be changed from outside with, for instance, a simple `activeCycleId='xyz'`.
+If this information needs to be changed, it has to be stored in a state on the parent component and the state (as well as it's dispatch function) will be stored in a context.
+
+In order to keep everything in order, one can use TS interfaces to create an specific typing to the context:
+
+```tsx
+interface CyclesContextData {
+  activeCycleId: string | null;
+}
+
+export const CyclesContext = createContext({
+  activeCycleId: "abc",
+} as CyclesContextData);
+```
+
+### Context Provider
+
+Inside the created context there is a 'sub-component'that is native from React's Context API: the provider. Like the `ThemeProvider` it encapsules the components that will need this information:
+
+```jsx
+const [activeCycleId,setActiveCycleId]=useState(0)
+
+<CyclesContext.Provider value={{activeCycleId,setActiveCycleId}}>
+   children components
+</CyclesContext.Provider>
+```
+
+### Context Isolation
+
+It's possible to relocate the data and the functions of the context on it's own component. It will not return anything visible, onlu the context provider with the children prop inside.
+
+```jsx
+const [activeCycleId,setActiveCycleId]=useState(0)
+
+<CyclesContext.Provider value={{activeCycleId,setActiveCycleId}}>
+   {children}
+</CyclesContext.Provider>
+```
+
+In this case, all the cycles states information will be stored inside of this context component.
+To do so, it's important to have the types and interfaces declarations well organized, so we don't have an _entanglement_ of imports between interface components and context components. All of those can read the type declarations from the same source, independent of a component.
+
 ## React Rook Form
 
 Lib documentation: https://react-hook-form.com/get-started
@@ -111,6 +173,25 @@ function handleCreateNewCycle(data: newCycleFormData) {
 ```
 
 This function will restore the default values of the form (set as an argument on the useForm hook call). It's possible to call this function anywhere. So creating a reset button for the form is very simple.
+
+### 7 - Form Provider
+
+If you need to pass the functions from RHF into different components, RHF provides (pun intended) a context provider. To use this FormProvider, it's needed to store the useForm() into a variable.
+
+```tsx
+const newCycleForm = useForm<newCycleFormData>({...});
+
+const { handleSubmit, watch, reset } = newCycleForm;
+<FormProvider {...newCycleForm}>
+  <NewCycleForm />
+</FormProvider>;
+```
+
+Then, inside the child component, just call the context provided (pun intended, again) by RHF'
+
+```tsx
+const { register } = useFormContext();
+```
 
 ## Zod - Form Validation
 

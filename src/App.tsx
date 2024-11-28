@@ -5,6 +5,7 @@ import { Router } from "./Router";
 import { GlobalStyle } from "./styles/global";
 import { defaultTheme } from "./styles/themes/default";
 import { lightTheme } from "./styles/themes/light";
+import { CyclesContextProvider } from "./contexts/CyclesContext";
 
 export function App() {
   const [theme, setTheme] = useState<"default" | "light">("default");
@@ -18,7 +19,9 @@ export function App() {
   return (
     <ThemeProvider theme={currentTheme}>
       <BrowserRouter>
-        <Router theme={theme} toggleTheme={toggleTheme} />
+        <CyclesContextProvider>
+          <Router theme={theme} toggleTheme={toggleTheme} />
+        </CyclesContextProvider>
       </BrowserRouter>
 
       <GlobalStyle />
