@@ -6,9 +6,7 @@ This document contains some of the initial setup process that are needed on othe
 
 ## React's Use Reducer
 
-### Definitions and Syntax
-
-#### useReducer Hook
+### useReducer Hook
 
 Hook that sets the state and the dispatcher. Unlike useState, useReducer can handle with more complex state information. The reducer function (`CyclesReducer`, in this case) can change different parts of the state information with the dispatch function depending on the action you send to it. (The dispatch function of the state, the `setState` is always set to replace all the data of the state).
 
@@ -23,7 +21,7 @@ const [cyclesState, dispatch] = useReducer(CyclesReducer, {
 });
 ```
 
-#### Reducer Function
+### Reducer Function
 
 The reducer function is a function that will handle the information contained in the state and return the updated state. It has normally a switch statement with a case for each possible Action it can perform. This function expects two arguments, the initial state and the action it will perform. At the application this reducer function will be called by the dispatcher of the useReducer hook.
 
@@ -44,7 +42,7 @@ cexport function CyclesReducer(state: CyclesState, action: any) {
 }
 ```
 
-#### Action Types.
+### Action Types.
 
 These are the names of each action. It can be a string or can be a reference to a enum of actions. It's better to use TS' enums to list all the action types, so can the VSCode's Intellisense suggest the action types as we use the dispatches. The code editor will also spot if an incorrect action type is called in the dispatcher:
 
@@ -56,7 +54,7 @@ export enum ActionTypes {
 }
 ```
 
-#### Dispatcher Function
+### Dispatcher Function
 
 The dispatcher function is the function that will trigger the reducer function. (kind of the same way it triggers the state update on the useState hook). It's argument must recieve an object with the action type, as shown below.
 
@@ -66,7 +64,7 @@ dispatch({
 });
 ```
 
-#### Isolate actions
+### Isolate actions
 
 As the project grows, it's easy to forget the payloads for each action on the dispatch functions. So it's interesting to create functions that return exactly what each dispach action needs and give types to the parameters of the function, so the intellisense will be aware of the params.
 
@@ -90,6 +88,16 @@ dispatch(addNewCycleAction(newCycle));
 ```
 
 Instead of the object with type and payload, only the action function and the function param will feed the payload of the action.
+
+## Immer
+
+Immer is a lib that will handle with immutability of data. Normally used alongside with useReducer.
+
+###
+
+To do so, we use the `produce` function of the library. This function creates a draft that will accept mutable interactions on it, like `ARRAY.push()` or `variable=NEW_VARIABLE_VALUE` and the produce function will create a immutable interaction to the state.
+
+Use case #1
 
 ## React's Context API
 
