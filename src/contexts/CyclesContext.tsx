@@ -1,6 +1,12 @@
 import { createContext, ReactNode, useReducer, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Cycle } from "../types";
+import { CyclesReducer } from "../reducers/cycles/reducer";
+import {
+  addNewCycleAction,
+  interruptCycleAction,
+  markCurrentCycleAsCompleteAction,
+} from "../reducers/cycles/actions";
 
 type CreateCycleData = {
   task: string;
@@ -24,56 +30,13 @@ interface CyclesContextProviderProps {
   children: ReactNode;
 }
 
-interface CyclesState {
-  cycles: Cycle[];
-  activeCycleId: string | null;
-}
-
 export function CyclesContextProvider({
   children,
 }: CyclesContextProviderProps) {
-  const [cyclesState, dispatch] = useReducer(
-    (state: CyclesState, action: any) => {
-      switch (action.type) {
-        case "ADD_NEW_CYCLE":
-          return {
-            ...state,
-            cycles: [...state.cycles, action.payload.newCycle],
-            activeCycleId: action.payload.newCycle.id,
-          };
-        case "INTERRUPT_CYCLE":
-          return {
-            ...state,
-            activeCycleId: null,
-            cycles: state.cycles.map((cycle) => {
-              if (cycle.id === state.activeCycleId) {
-                return { ...cycle, interruptedDate: new Date() };
-              } else {
-                return cycle;
-              }
-            }),
-          };
-        case "MARK_CURRENT_CYCLE_AS_COMPLETE":
-          return {
-            ...state,
-            activeCycleId: null,
-            cycles: state.cycles.map((cycle) => {
-              if (cycle.id === state.activeCycleId) {
-                return { ...cycle, completedDate: new Date() };
-              } else {
-                return cycle;
-              }
-            }),
-          };
-        default:
-          return state;
-      }
-    },
-    {
-      cycles: [],
-      activeCycleId: null,
-    }
-  );
+  const [cyclesState, dispatch] = useReducer(CyclesReducer, {
+    cycles: [],
+    activeCycleId: null,
+  });
   const [secondsPassed, setSecondsPassed] = useState(0);
 
   const { cycles, activeCycleId } = cyclesState;
@@ -85,9 +48,7 @@ export function CyclesContextProvider({
   }
 
   function setCurrentCycleAsComplete() {
-    dispatch({
-      type: "MARK_CURRENT_CYCLE_AS_COMPLETE",
-    });
+    dispatch(markCurrentCycleAsCompleteAction());
   }
 
   function createNewCycle(data: CreateCycleData) {
@@ -96,18 +57,12 @@ export function CyclesContextProvider({
       id: uuidv4(),
       startDate: new Date(),
     };
-    dispatch({
-      type: "ADD_NEW_CYCLE",
-      payload: { newCycle: newCycle },
-    });
-    // setCycles((state) => [...state, newCycle]);
+    dispatch(addNewCycleAction(newCycle));
     setSecondsPassed(0);
   }
 
   function interruptCycle() {
-    dispatch({
-      type: "INTERRUPT_CYCLE",
-    });
+    dispatch(interruptCycleAction());
   }
 
   return (

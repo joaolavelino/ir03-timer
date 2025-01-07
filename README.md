@@ -4,6 +4,93 @@ Project created during the React formation @Rocketseat.
 
 This document contains some of the initial setup process that are needed on other projects and some tips that I gather during the learning process.
 
+## React's Use Reducer
+
+### Definitions and Syntax
+
+#### useReducer Hook
+
+Hook that sets the state and the dispatcher. Unlike useState, useReducer can handle with more complex state information. The reducer function (`CyclesReducer`, in this case) can change different parts of the state information with the dispatch function depending on the action you send to it. (The dispatch function of the state, the `setState` is always set to replace all the data of the state).
+
+TLDR: useReducer is a way to deal with more complex data on a state and let you customize how the dispatch will handle it with Actions.
+
+The structure is similar to useState. You set the name of the state and the dispatch function, call the useReducer() hook and as an argument, instead of passing only the initial information, as we'd do with the useState() hook, we pass the reducer function and the initial value of the state. In this case:
+
+```tsx
+const [cyclesState, dispatch] = useReducer(CyclesReducer, {
+  cycles: [],
+  activeCycleId: null,
+});
+```
+
+#### Reducer Function
+
+The reducer function is a function that will handle the information contained in the state and return the updated state. It has normally a switch statement with a case for each possible Action it can perform. This function expects two arguments, the initial state and the action it will perform. At the application this reducer function will be called by the dispatcher of the useReducer hook.
+
+Here's an example of reducer function: You can add as many cases as necessary. Just create a new action for it.
+
+```tsx
+cexport function CyclesReducer(state: CyclesState, action: any) {
+  switch (action.type) {
+    case ActionTypes.ADD_NEW_CYCLE:
+      return {
+        ...state,
+        cycles: [...state.cycles, action.payload.newCycle],
+        activeCycleId: action.payload.newCycle.id,
+      };
+    default:
+      return state;
+  }
+}
+```
+
+#### Action Types.
+
+These are the names of each action. It can be a string or can be a reference to a enum of actions. It's better to use TS' enums to list all the action types, so can the VSCode's Intellisense suggest the action types as we use the dispatches. The code editor will also spot if an incorrect action type is called in the dispatcher:
+
+```ts
+export enum ActionTypes {
+  ADD_NEW_CYCLE = "ADD_NEW_CYCLE",
+  INTERRUPT_CYCLE = "INTERRUPT_CYCLE",
+  MARK_CURRENT_CYCLE_AS_COMPLETE = "MARK_CURRENT_CYCLE_AS_COMPLETE",
+}
+```
+
+#### Dispatcher Function
+
+The dispatcher function is the function that will trigger the reducer function. (kind of the same way it triggers the state update on the useState hook). It's argument must recieve an object with the action type, as shown below.
+
+```tsx
+dispatch({
+  type: ActionTypes.MARK_CURRENT_CYCLE_AS_COMPLETE,
+});
+```
+
+#### Isolate actions
+
+As the project grows, it's easy to forget the payloads for each action on the dispatch functions. So it's interesting to create functions that return exactly what each dispach action needs and give types to the parameters of the function, so the intellisense will be aware of the params.
+
+So on this step, I created a folder for each subject and inside there is the `reducer.ts` file with the reducer function and the `actions.ts` with the action types enum and the action functions that will feed the dispatch functions (which are located on the cycles context file).
+
+Example of an action function.
+
+```tsx
+export function addNewCycleAction(newCycle: Cycle) {
+  return {
+    type: ActionTypes.ADD_NEW_CYCLE,
+    payload: { newCycle },
+  };
+}
+```
+
+And here is the dispatch function of the useReducer hook:
+
+```tsx
+dispatch(addNewCycleAction(newCycle));
+```
+
+Instead of the object with type and payload, only the action function and the function param will feed the payload of the action.
+
 ## React's Context API
 
 ### 1 - CreateContext() and UseContext()
