@@ -93,11 +93,73 @@ Instead of the object with type and payload, only the action function and the fu
 
 Immer is a lib that will handle with immutability of data. Normally used alongside with useReducer.
 
-###
+### Produce function
 
 To do so, we use the `produce` function of the library. This function creates a draft that will accept mutable interactions on it, like `ARRAY.push()` or `variable=NEW_VARIABLE_VALUE` and the produce function will create a immutable interaction to the state.
 
-Use case #1
+#### Use case #1
+
+The first use will be on the first case of the reducer function:
+
+Original version:
+
+```tsx
+case ActionTypes.ADD_NEW_CYCLE:
+      return {
+        ...state,
+        cycles: [...state.cycles, action.payload.newCycle],
+        activeCycleId: action.payload.newCycle.id,
+      };
+```
+
+With the produce function:
+
+```tsx
+case ActionTypes.ADD_NEW_CYCLE:
+      return produce(state, draft=>{
+        draft.cycles.push(action.payload.newCycle)
+        draft.activeCycleId=action.payload.newCycle.id
+      })
+```
+
+Note that we could deal with the array without destructuring it on a new array. The new cycle was simply pushed into the cycles array.
+
+#### Use case #2
+
+In cases that we need to find an instance on an array on the state, we can find the index of this instance and then on the draft of the produce function, we can simply change the value of it on the original array.
+
+Original version:
+
+```tsx
+return {
+  ...state,
+  activeCycleId: null,
+  cycles: state.cycles.map((cycle) => {
+    if (cycle.id === state.activeCycleId) {
+      return { ...cycle, interruptedDate: new Date() };
+    } else {
+      return cycle;
+    }
+  }),
+};
+```
+
+With the produce function:
+
+```tsx
+const currentCycleIndex = state.cycles.findIndex(cycle=>{return cycle.id===state.activeCycleId})
+if (currentCycleIndex>0){
+  return state
+}
+return produce(state, draft=>{
+  draft.activeCycleId=null
+  draft.cycles[currentCycleIndex].interruptedDate= new Date()
+
+})}
+```
+
+With the produce function it's not needed to map the entire array and then find the correct instance and then edit it.
+We can simply find the index and edit.
 
 ## React's Context API
 
