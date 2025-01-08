@@ -89,6 +89,31 @@ dispatch(addNewCycleAction(newCycle));
 
 Instead of the object with type and payload, only the action function and the function param will feed the payload of the action.
 
+### Initializer Function
+
+The `useReducer` hook has a third parameter (just to remember: 1st param is the reducer function, the second is the initial state). This third parameter is the _initializer function_. This is the first action to be performed by the reducer. Normally used to fetch data from somewhere. (in this case, from the Local Storage).
+
+It's possible to pass `initialState` as an argument on the initializer funciton, so we can return this initial value, if there is no data found.
+
+Example:
+
+```tsx
+const [cyclesState, dispatch] = useReducer(
+  CyclesReducer,
+  {
+    cycles: [],
+    activeCycleId: null,
+  },
+  //initializer - initial state is what was declared on the second param of the useReducer
+  (initialState) => {
+    const storedStateAsJson = localStorage.getItem(
+      "@ignite-timer:cycles-state-1.0.0"
+    );
+    return storedStateAsJson ? JSON.parse(storedStateAsJson) : initialState;
+  }
+);
+```
+
 ## Immer
 
 Immer is a lib that will handle with immutability of data. Normally used alongside with useReducer.
@@ -154,7 +179,6 @@ if (currentCycleIndex>0){
 return produce(state, draft=>{
   draft.activeCycleId=null
   draft.cycles[currentCycleIndex].interruptedDate= new Date()
-
 })}
 ```
 
