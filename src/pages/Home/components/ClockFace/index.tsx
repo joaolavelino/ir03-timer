@@ -29,6 +29,7 @@ export const ClockFace: React.FC<ClockFaceProps> = () => {
         if (timeDifference >= totalSeconds) {
           setCurrentCycleAsComplete();
           updateClock(0);
+          console.log(activeCycleId);
         } else {
           //if it's not over
           updateClock(timeDifference);

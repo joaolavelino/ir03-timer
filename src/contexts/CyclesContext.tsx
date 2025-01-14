@@ -88,7 +88,7 @@ export function CyclesContextProvider({
       startDate: new Date(),
     };
     dispatch(addNewCycleAction(newCycle));
-    setSecondsPassed(0);
+    // setSecondsPassed(0);
   }
 
   function interruptCycle() {
