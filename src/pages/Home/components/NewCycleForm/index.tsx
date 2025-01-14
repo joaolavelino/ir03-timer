@@ -13,22 +13,22 @@ export const NewCycleForm: React.FC<NewCycleFormProps> = () => {
 
   return (
     <FormContainer>
-      <label htmlFor="taskName">I'm working on</label>
+      <label htmlFor="taskName">Ich Arbeite an</label>
       <datalist id="task-suggestions">
-        <option value="Check e-mails" />
-        <option value="Wordpress plugins update" />
-        <option value="Design system" />
-        <option value="Office projects" />
+        <option value="E-mails Abrufen" />
+        <option value="Wordpress-Plugins aktualisieren" />
+        <option value="Designsystem" />
+        <option value="Büroprojekte" />
       </datalist>
       <TaskInput
         type="text"
         id="taskName"
-        placeholder="Give your project a name"
+        placeholder="Geben sie Ihrem Projekt einen Namen"
         list="task-suggestions"
         disabled={!!activeCycle}
         {...register("task")}
       />
-      <label htmlFor="taskMinutesAmount">during</label>
+      <label htmlFor="taskMinutesAmount">für</label>
       <MinutesAmountInput
         type="number"
         placeholder="00"
@@ -39,7 +39,7 @@ export const NewCycleForm: React.FC<NewCycleFormProps> = () => {
         disabled={!!activeCycle}
         {...register("taskMinutesAmount", { valueAsNumber: true })}
       />
-      <span>minutes</span>
+      <span>minuten</span>
     </FormContainer>
   );
 };

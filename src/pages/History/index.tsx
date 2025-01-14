@@ -1,22 +1,22 @@
+import { formatDistanceToNow } from "date-fns";
+import { de } from "date-fns/locale/de";
 import { useContext } from "react";
 import { CyclesContext } from "../../contexts/CyclesContext";
 import { HistoryContainer, HistoryList, Status } from "./styles";
-import { formatDistanceToNow } from "date-fns";
-import { ptBR } from "date-fns/locale/pt-BR";
 
 export function History() {
   const { cycles } = useContext(CyclesContext);
 
   return (
     <HistoryContainer>
-      <h1>Meu histórico</h1>
+      <h1>Mein Aufgabenverlauf</h1>
       <HistoryList>
         <table>
           <thead>
             <tr>
-              <th>Tarefa</th>
-              <th>Duração</th>
-              <th>Início</th>
+              <th>Aufgabe</th>
+              <th>Dauer</th>
+              <th>Anfang</th>
               <th>Status</th>
             </tr>
           </thead>
@@ -24,22 +24,22 @@ export function History() {
             {cycles?.map((cycle) => (
               <tr key={cycle?.id}>
                 <td>{cycle?.task}</td>
-                <td>{cycle?.taskMinutesAmount} minutos</td>
+                <td>{cycle?.taskMinutesAmount} minuten</td>
                 <td>
                   {formatDistanceToNow(cycle.startDate, {
                     addSuffix: true,
-                    locale: ptBR,
+                    locale: de,
                   })}
                 </td>
                 <td>
                   {cycle?.completedDate && (
-                    <Status status="complete">Concluído</Status>
+                    <Status status="complete">Vollendet</Status>
                   )}
                   {cycle?.interruptedDate && (
-                    <Status status="canceled">Cancelado</Status>
+                    <Status status="canceled">Abgesagt</Status>
                   )}
                   {!cycle?.interruptedDate && !cycle.completedDate && (
-                    <Status status="ongoing">Em andamento</Status>
+                    <Status status="ongoing">Bearbeitung</Status>
                   )}
                 </td>
               </tr>
