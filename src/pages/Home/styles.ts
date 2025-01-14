@@ -12,6 +12,11 @@ export const HomeContainer = styled.main`
     flex-direction: column;
     align-items: center;
     gap: 3.5rem;
+    min-height: 2rem;
+  }
+
+  h2 {
+    line-height: 2rem;
   }
 `;
 

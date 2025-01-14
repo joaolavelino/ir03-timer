@@ -23,7 +23,7 @@ const newCycleFormSchema = zod.object({
 export type newCycleFormData = zod.infer<typeof newCycleFormSchema>;
 
 export function Home() {
-  const { activeCycleId, createNewCycle, interruptCycle } =
+  const { activeCycleId, createNewCycle, interruptCycle, activeCycle } =
     useContext(CyclesContext);
 
   const newCycleForm = useForm<newCycleFormData>({
@@ -45,9 +45,13 @@ export function Home() {
     <HomeContainer>
       <form action="" onSubmit={handleSubmit(handleCreateNewCycle)}>
         {/* FormProvider coloca aquelas informações e funções do RHF em um contexto para ser usado num componente filho */}
-        <FormProvider {...newCycleForm}>
-          <NewCycleForm />
-        </FormProvider>
+        {activeCycle ? (
+          <h2>{activeCycle ? activeCycle.task : " "}</h2>
+        ) : (
+          <FormProvider {...newCycleForm}>
+            <NewCycleForm />
+          </FormProvider>
+        )}
         <ClockFace />
         {!activeCycleId ? (
           <StartCountdownButton type="submit" disabled={isSubmitDisabled}>

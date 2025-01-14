@@ -33,7 +33,7 @@ export const NewCycleForm: React.FC<NewCycleFormProps> = () => {
         type="number"
         placeholder="00"
         id="taskMinutesAmount"
-        min={1}
+        min={5}
         max={60}
         step={5}
         disabled={!!activeCycle}
